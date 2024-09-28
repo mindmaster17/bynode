@@ -124,7 +124,7 @@
                 <label for="referral">Referral Code:</label>
                 <input type="text" id="referral" name="referral" placeholder="Enter referral code (if any)">
             </div>
-            <button type="submit" class="payment-button">Proceed to Payment</button>
+            <button type="submit" class="payment-button1">Proceed to Payment</button>
         </form>
     </div>
 
@@ -148,6 +148,15 @@
 
             // Generate a user ID
             const userId = generateUserId();
+
+             // Set the UPI payment link
+            const upiLink = `upi://pay?pa=navadeepck@oksbi&pn=Navadeep%20C%20K&am=10&cu=INR&tn=UserID:${userId}`;
+
+            // Assign the UPI link to the button
+            document.getElementById('upiButton').onclick = function() {
+                window.location.href = upiLink;
+            };
+
 
             // Add user ID to FormData
             const formData = new FormData();

@@ -33,10 +33,6 @@
             transition: transform 0.2s ease;
         }
 
-        .container:hover {
-            transform: scale(1.02);
-        }
-
         h1 {
             text-align: center;
             color: #ffffff;
@@ -97,6 +93,28 @@
         .payment-button:active {
             transform: scale(0.98);
         }
+
+        /* Popup Styles */
+        .popup {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            background-color: rgba(0, 0, 0, 0.7); /* Background with transparency */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #000;
+        }
     </style>
 </head>
 <body>
@@ -128,6 +146,13 @@
         </form>
     </div>
 
+    <!-- Popup HTML -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <h2>Please wait...</h2>
+        </div>
+    </div>
+
     <script>
         // Function to generate a unique user ID
         function generateUserId() {
@@ -138,7 +163,10 @@
         // Form submission handler
         document.getElementById('registrationForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent form submission
-            
+
+            // Show the popup
+            document.getElementById('popup').style.display = 'flex';
+
             // Collect form data
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
@@ -159,7 +187,7 @@
             formData.append('userId', userId); // Include userId
 
             // Send the form data to Google Sheets
-            const scriptURL = 'https://script.google.com/macros/s/AKfycby_dHlXAl7ZN01I11B205Giur51LC77QSSCxbE-8MYYHj3dpziAzYFRWxsYHylS8d6dMg/exec';
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxvui_ghDZ0pMze3zTxiRCNCR8SomeKInGeQp86XUNMRpm6oHVbcTdAZZwNKfmuVSQ-uw/exec';
             fetch(scriptURL, { method: 'POST', body: formData })
                 .then(response => {
                     console.log('Success!', response);

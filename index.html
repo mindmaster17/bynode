@@ -168,7 +168,7 @@
                 <label for="referral">Referral Code:</label>
                 <input type="text" id="referral" name="referral" placeholder="Enter referral code (if any)">
             </div>
-            <button class="payment-button1"><a href="upi://pay?pa=navadeepck@oksbi&pn=Navadeep%20C%20K&am=10&cu=INR" class="atag" >click here</a></button>
+            <button type="button" class="payment-button1" id="upiButton">Click Here for UPI Payment</button>
             <button type="submit" href="upi://pay?pa=navadeepck@oksbi&pn=Navadeep%20C%20K&am=10&cu=INR" class="payment-button">Proceed to Payment</button>
           
         </form>
@@ -209,6 +209,13 @@ document.getElementById('registrationForm').addEventListener('submit', function(
 
     // Generate a user ID
     const userId = generateUserId();
+     // Set the UPI payment link
+        const upiLink = `upi://pay?pa=navadeepck@oksbi&pn=Navadeep%20C%20K&am=10&cu=INR&tn=UserID:${userId}`;
+
+        // Assign the UPI link to the button
+        document.getElementById('upiButton').onclick = function() {
+            window.location.href = upiLink;
+        };
 
     // Redirect to confirmation page with user ID and name
     window.location.href = `confirmation.html?userId=${userId}&name=${encodeURIComponent(name)}`;

@@ -1,4 +1,4 @@
-var sheetName = 'registrationForm';
+var sheetName = 'Sheet1';
 var scriptProp = PropertiesService.getScriptProperties();
 
 function intialSetup() {
@@ -21,7 +21,7 @@ function doPost(e) {
     var newRow = headers.map(function(header) {
       if (header === 'timestamp') {
         return new Date();
-      } else if (header === 'userid') { // Assuming you have a 'userId' column in your sheet
+      } else if (header === 'userId') { // Assuming you have a 'userId' column in your sheet
         return e.parameter.userId; // Get userId from the request
       } else {
         return e.parameter[header];

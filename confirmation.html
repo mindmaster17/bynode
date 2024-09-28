@@ -54,7 +54,7 @@
 
     <h1>Registration Successful!</h1>
     <div class="info" id="userInfo"></div>
-    <button class="button" id="downloadBtn">Download Info</button>
+    <button class="button" id="copyBtn">Copy Info</button>
     <button class="button" id="shareBtn">Share Info</button>
 
     <script>
@@ -75,15 +75,13 @@
         const userInfo = `User ID: ${userId}\nName: ${name}`;
         document.getElementById('userInfo').innerText = userInfo;
 
-        // Download functionality
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            const blob = new Blob([userInfo], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'user_info.txt';
-            a.click();
-            URL.revokeObjectURL(url);
+        // Copy functionality
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            navigator.clipboard.writeText(userInfo).then(() => {
+                alert('Info copied to clipboard!');
+            }).catch(err => {
+                console.error('Error copying text: ', err);
+            });
         });
 
         // Share functionality

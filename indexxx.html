@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6f91, #ff9671, #ffc75f, #f9f871);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            background: #fff;
+            color: #333;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 400px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            transition: transform 0.2s ease;
+        }
+
+        .container:hover {
+            transform: scale(1.02);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6f91;
+            margin-bottom: 20px;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #ff9671;
+            outline: none;
+        }
+
+        .payment-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ff9671, #ffc75f);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .payment-button:hover {
+            background: linear-gradient(135deg, #ffc75f, #f9f871);
+            transform: scale(1.05);
+        }
+
+        .payment-button:active {
+            transform: scale(0.98);
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Animated background decorations */
+        .background-decor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: rgba(255, 255, 255, 0.1);
+            clip-path: circle(50% at 0 0);
+            transition: transform 0.1s ease-out;
+        }
+
+        .background-decor-2 {
+            clip-path: circle(30% at 100% 100%);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .background-decor-3 {
+            clip-path: circle(20% at 50% 50%);
+            background: rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-decor"></div>
+    <div class="background-decor background-decor-2"></div>
+    <div class="background-decor background-decor-3"></div>
+
+    <div class="container">
+        <h1>Event Registration</h1>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+            </div>
+            <div class="form-group">
+                <label for="institution">Institution:</label>
+                <input type="text" id="institution" name="institution" placeholder="Enter your institution's name" required>
+            </div>
+            <!-- New Referral Code Section -->
+            <div class="form-group">
+                <label for="referral">Referral Code:</label>
+                <input type="text" id="referral" name="referral" placeholder="Enter referral code (optional)">
+            </div>
+            <button type="submit" class="payment-button">Proceed to Payment</button>
+        </form>
+    </div>
+
+    <script>
+        // Parallax Effect for Background Elements
+        const decor1 = document.querySelector('.background-decor');
+        const decor2 = document.querySelector('.background-decor-2');
+        const decor3 = document.querySelector('.background-decor-3');
+
+        document.addEventListener('mousemove', (event) => {
+            const { clientX, clientY } = event;
+            const moveX1 = (clientX - window.innerWidth / 2) * 0.02;
+            const moveY1 = (clientY - window.innerHeight / 2) * 0.02;
+            const moveX2 = (clientX - window.innerWidth / 2) * 0.04;
+            const moveY2 = (clientY - window.innerHeight / 2) * 0.04;
+            const moveX3 = (clientX - window.innerWidth / 2) * 0.06;
+            const moveY3 = (clientY - window.innerHeight / 2) * 0.06;
+
+            decor1.style.transform = `translate(${moveX1}px, ${moveY1}px)`;
+            decor2.style.transform = `translate(${moveX2}px, ${moveY2}px)`;
+            decor3.style.transform = `translate(${moveX3}px, ${moveY3}px)`;
+        });
+
+        // Form submission handler
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            
+            // Collect form data
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const institution = document.getElementById('institution').value;
+            const referral = document.getElementById('referral').value || 'None';
+
+            // Display confirmation message (or redirect to a payment page)
+            alert(`Registration Successful!\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nInstitution: ${institution}\nReferral Code: ${referral}`);
+        });
+    </script>
+    
+</body>
+</html>

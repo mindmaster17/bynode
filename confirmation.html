@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Confirmation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .info {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background: #ff6f91;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .button:hover {
+            background: #ff9671;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Registration Successful!</h1>
+    <div class="info" id="userInfo"></div>
+    <button class="button" id="downloadBtn">Download Info</button>
+    <button class="button" id="shareBtn">Share Info</button>
+
+    <script>
+        // Function to get query parameters
+        function getQueryParams() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const queryArray = queryString.split("&");
+            queryArray.forEach(param => {
+                const [key, value] = param.split("=");
+                params[decodeURIComponent(key)] = decodeURIComponent(value);
+            });
+            return params;
+        }
+
+        // Get user info from URL
+        const { userId, name } = getQueryParams();
+        const userInfo = `User ID: ${userId}\nName: ${name}`;
+        document.getElementById('userInfo').innerText = userInfo;
+
+        // Download functionality
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const blob = new Blob([userInfo], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'user_info.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Share functionality
+        document.getElementById('shareBtn').addEventListener('click', function() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Registration Info',
+                    text: userInfo,
+                }).catch(console.error);
+            } else {
+                alert('Sharing not supported in this browser.');
+            }
+        });
+    </script>
+
+</body>
+</html>

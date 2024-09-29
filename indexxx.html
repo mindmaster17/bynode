@@ -155,38 +155,47 @@
     </div>
 
     <script>
-        // Parallax Effect for Background Elements
-        const decor1 = document.querySelector('.background-decor');
-        const decor2 = document.querySelector('.background-decor-2');
-        const decor3 = document.querySelector('.background-decor-3');
-
-        document.addEventListener('mousemove', (event) => {
-            const { clientX, clientY } = event;
-            const moveX1 = (clientX - window.innerWidth / 2) * 0.02;
-            const moveY1 = (clientY - window.innerHeight / 2) * 0.02;
-            const moveX2 = (clientX - window.innerWidth / 2) * 0.04;
-            const moveY2 = (clientY - window.innerHeight / 2) * 0.04;
-            const moveX3 = (clientX - window.innerWidth / 2) * 0.06;
-            const moveY3 = (clientY - window.innerHeight / 2) * 0.06;
-
-            decor1.style.transform = `translate(${moveX1}px, ${moveY1}px)`;
-            decor2.style.transform = `translate(${moveX2}px, ${moveY2}px)`;
-            decor3.style.transform = `translate(${moveX3}px, ${moveY3}px)`;
-        });
+        // Function to generate a unique user ID
+        function generateUserId() {
+            const randomNumber = Math.floor(10000000 + Math.random() * 90000000); // Generate a random 8-digit number
+            return `TMS${randomNumber}`; // Return the user ID in the desired format
+        }
 
         // Form submission handler
         document.getElementById('registrationForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent form submission
-            
+
+            // Show the popup
+            document.getElementById('popup').style.display = 'flex';
+
             // Collect form data
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
             const institution = document.getElementById('institution').value;
-            const referral = document.getElementById('referral').value || 'None';
+            const referral = document.getElementById('referral').value;
 
-            // Display confirmation message (or redirect to a payment page)
-            alert(`Registration Successful!\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nInstitution: ${institution}\nReferral Code: ${referral}`);
+            // Generate a user ID
+            const userId = generateUserId();
+
+            // Add user ID to FormData
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('phone', phone);
+            formData.append('institution', institution);
+            formData.append('referral', referral);
+            formData.append('userId', userId); // Include userId
+
+            // Send the form data to Google Sheets
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbys2_wdF4iHQHh3tSCUeqt3dtZ3gjD67sHzEOGUkQglMsup9BJXfjdrx17DbJUEtYt4dw/exec';
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => {
+                    console.log('Success!', response);
+                    // Redirect to confirmation page with user ID and name
+                    window.location.href = `confirmation.html?userId=${userId}&name=${encodeURIComponent(name)}`;
+                })
+                .catch(error => console.error('Error!', error.message));
         });
     </script>
     

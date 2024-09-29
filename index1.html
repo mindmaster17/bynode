@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Registration</title>                                 
+    <title>Registration Confirmation</title>
     <style>
         * {
             margin: 0;
@@ -17,185 +17,85 @@
             color: #ffffff;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-        }
-
-        .container {
-            background: rgba(153, 133, 133, 0.522);
-            color: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            max-width: 400px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-            z-index: 10;
-            transition: transform 0.2s ease;
+            text-align: center;
         }
 
         h1 {
-            text-align: center;
-            color: #ffffff;
             margin-bottom: 20px;
             font-size: 30px;
             font-weight: bold;
         }
 
-        .form-group {
+        .info {
             margin-bottom: 20px;
+            font-size: 20px;
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 16px;
-            font-weight: bold;
+        .button {
+            padding: 10px 20px;
+            background: #ff6f91;
             color: #ffffff;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #444;
-            border-radius: 8px;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            transition: border-color 0.3s ease;
-        }
-
-        input::placeholder {
-            color: #bbb;
-        }
-
-        input:focus {
-            border-color: #ff6f91;
-            outline: none;
-        }
-
-        .payment-button {
-            width: 100%;
-            padding: 15px;
-            background: #e33434;
-            color: #fff;
             border: none;
             border-radius: 8px;
-            font-size: 18px;
+            margin-bottom: 15px;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
+            transition: background 0.3s ease;
         }
 
-        .payment-button:hover {
-            background: #eb0404;
-            transform: scale(1.05);
-        }
-
-        .payment-button:active {
-            transform: scale(0.98);
-        }
-
-        /* Popup Styles */
-        .popup {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            background-color: rgba(0, 0, 0, 0.7); /* Background with transparency */
-            justify-content: center;
-            align-items: center;
-        }
-
-        .popup-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            color: #000;
+        .button:hover {
+            background: #ff9671;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Event Registration</h1>
-        <form id="registrationForm" name='submit-to-google-sheet'>
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone Number:</label>
-                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
-            </div>
-            <div class="form-group">
-                <label for="institution">Institution:</label>
-                <input type="text" id="institution" name="institution" placeholder="Enter your institution's name" required>
-            </div>
-            <div class="form-group">
-                <label for="referral">Referral Code:</label>
-                <input type="text" id="referral" name="referral" placeholder="Enter referral code (if any)">
-            </div>
-            <button type="submit" class="payment-button">Proceed to Payment</button>
-        </form>
-    </div>
-
-    <!-- Popup HTML -->
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <h2>Please wait...</h2>
-        </div>
-    </div>
+    <h1>Registration Successful!</h1>
+    <div class="info" id="userInfo"></div>
+    <button class="button" id="copyBtn">Copy Info</button>
+    <button class="button" id="shareBtn">Share Info</button>
 
     <script>
-        // Function to generate a unique user ID
-        function generateUserId() {
-            const randomNumber = Math.floor(10000000 + Math.random() * 90000000); // Generate a random 8-digit number
-            return `TMS${randomNumber}`; // Return the user ID in the desired format
+        // Function to get query parameters
+        function getQueryParams() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const queryArray = queryString.split("&");
+            queryArray.forEach(param => {
+                const [key, value] = param.split("=");
+                params[decodeURIComponent(key)] = decodeURIComponent(value);
+            });
+            return params;
         }
 
-        // Form submission handler
-        document.getElementById('registrationForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission
+        // Get user info from URL
+        const { userId, name } = getQueryParams();
+        const userInfo = `User ID: ${userId}\nName: ${name}`;
+        document.getElementById('userInfo').innerText = userInfo;
 
-            // Show the popup
-            document.getElementById('popup').style.display = 'flex';
+        // Copy functionality
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            navigator.clipboard.writeText(userInfo).then(() => {
+                alert('Info copied to clipboard!');
+            }).catch(err => {
+                console.error('Error copying text: ', err);
+            });
+        });
 
-            // Collect form data
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const institution = document.getElementById('institution').value;
-            const referral = document.getElementById('referral').value;
-
-            // Generate a user ID
-            const userId = generateUserId();
-
-            // Add user ID to FormData
-            const formData = new FormData();
-            formData.append('name', name);
-            formData.append('email', email);
-            formData.append('phone', phone);
-            formData.append('institution', institution);
-            formData.append('referral', referral);
-            formData.append('userId', userId); // Include userId
-
-            // Send the form data to Google Sheets
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzIWltltzGerilinBVpsrXf-D-l42JnqGAevUolRL3YYOZZoUPsiifSUF1Qz-FEmL60/exec';
-            fetch(scriptURL, { method: 'POST', body: formData })
-                .then(response => {
-                    console.log('Success!', response);
-                    // Redirect to confirmation page with user ID and name
-                    window.location.href = `confirmation.html?userId=${userId}&name=${encodeURIComponent(name)}`;
-                })
-                .catch(error => console.error('Error!', error.message));
+        // Share functionality
+        document.getElementById('shareBtn').addEventListener('click', function() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Registration Info',
+                    text: userInfo,
+                }).catch(console.error);
+            } else {
+                alert('Sharing not supported in this browser.');
+            }
         });
     </script>
+
 </body>
 </html>

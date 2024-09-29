@@ -187,7 +187,7 @@
             formData.append('userId', userId); // Include userId
 
             // Send the form data to Google Sheets
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbyF2gqdbR5ClmeSEtF9vCSkkchA3WAvtifWRAzlOUjtH0NxXOfDU4hL6TR2gVrymqlX/exec';
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxoyiJBubgA0FjfGz2uEjXYDFaXcRuAR_KIfdQo-7Hxxs9B1KdjhBrh5uK9zGTmulbe/exec';
             fetch(scriptURL, { method: 'POST', body: formData })
                 .then(response => {
                     console.log('Success!', response);
